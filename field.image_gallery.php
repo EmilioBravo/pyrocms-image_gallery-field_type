@@ -39,35 +39,42 @@ class Field_image_gallery
 
 		$output .= '<input type="hidden" name="' . $data['form_slug'] . '" id="folder_id" value="' . $folder_id . '" />';
 
-		$output .= '<div id="dropbox">';
+		if($folder_id){
 
-		$this->CI->load->library('files/files');
+			$output .= '<div id="dropbox">';
 
-		$folder_contents = Files::folder_contents($folder_id);
-		$folder_files = $folder_contents['data']['file'];
-		if(count($folder_files)>0){
+			$this->CI->load->library('files/files');
 
-//			die(var_dump($folder_files));
+			$folder_contents = Files::folder_contents($folder_id);
+			$folder_files = $folder_contents['data']['file'];
+			if(count($folder_files)>0){
 
-			foreach($folder_files as $file){
-				$output .= '<div class="preview" id="' . $file->id . '">
-				<div class="delete">x</div>
-				<span class="imageHolder">
-				<img src="/files/large/' . $file->filename . '" />
-				<span class="uploaded"></span>
-				</span>
-				</div>';
+				foreach($folder_files as $file){
+					$output .= '<div class="preview" id="' . $file->id . '">
+					<div class="delete">x</div>
+					<span class="imageHolder">
+					<img src="/files/large/' . $file->filename . '" />
+					<span class="uploaded"></span>
+					</span>
+					</div>';
+				}
+
+
+
+			}else{
+
+				$output .= '<span class="message" style="">'.lang('streams:image_gallery.upload_empty_message').'</span>';
 			}
 
+			$output .=		'</div>';
 
 
 		}else{
 
-			$output .= '<span class="message" style="">'.lang('streams:image_gallery.upload_empty_message').'</span>';
+			$output .= '<p class="alert-info">'.lang('streams:image_gallery.save_first_message').'</p>';
 
 		}
 
-		$output .=		'</div>';
 
 		$this->CI->type->add_js('image_gallery', 'jquery.filedrop.js');
 		$this->CI->type->add_js('image_gallery', 'image_galleryfield.js');
